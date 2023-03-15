@@ -55,9 +55,6 @@ while True:
     try:
         WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'b-users__item.m-fans')))
         fans = browser.find_elements(By.CLASS_NAME, 'b-users__item.m-fans')
-        if len(fans) == 0:
-            print("No fans left!!")
-            exit()
         for fan in fans:
             fan_user_name = str(fan.find_element(By.CLASS_NAME, 'b-username').get_attribute('href')).split("/")[-1]
             print("Blocking ", fan_user_name)
@@ -73,4 +70,7 @@ while True:
         #can only block 1 user every 60 seconds
         sleep(61)
     except KeyboardInterrupt:
+        exit()
+    except TimeoutException:
+        print("No fans left!!")
         exit()
