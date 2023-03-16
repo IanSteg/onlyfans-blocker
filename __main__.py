@@ -4,10 +4,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from webdriver_manager.chrome import ChromeDriverManager
 
 #open a browser window
-browser  = webdriver.Chrome()
-WAIT = WebDriverWait(browser, 16, poll_frequency=2)
+browser  = webdriver.Chrome(ChromeDriverManager().install())
+WAIT = WebDriverWait(browser, 30, poll_frequency=2)
 
 #only urls we care about
 MAIN_URL = 'https://www.onlyfans.com/'
@@ -59,7 +60,7 @@ while True:
             fan_user_name = str(fan.find_element(By.CLASS_NAME, 'b-username').get_attribute('href')).split("/")[-1]
             print("Blocking ", fan_user_name)
             fan.find_element(By.CLASS_NAME, 'b-dropdown-dots-wrapper.has-tooltip').click()
-            block_button = WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'dropdown-menu.dropdown-menu-right.show'))).find_elements(By.XPATH, "./child::*")[9]
+            block_button = WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'dropdown-menu.dropdown-menu-right.show'))).find_elements(By.XPATH, "./child::*")[-2]
             block_button.click()
             WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'modal-body')))
             block_user = browser.find_elements(By.CLASS_NAME, 'b-input-radio__container')[-2]
@@ -69,6 +70,7 @@ while True:
             break
         #can only block 1 user every 60 seconds
         sleep(61)
+        browser.get(SUBS_URL) #refresh the page
     except KeyboardInterrupt:
         exit()
     except TimeoutException:
