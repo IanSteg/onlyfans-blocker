@@ -1,4 +1,7 @@
 from time import sleep
+from datetime import datetime
+import random
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -52,27 +55,37 @@ except Exception as e:
 browser.get(SUBS_URL)
 
 #do the blocking
+num_blocked = 0
 while True:
+    #daily block limit is 50
+    if num_blocked >= 50:
+        while (datetime.now().hour != 10):
+            sleep(60)
+        num_blocked = 0
     try:
         WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'b-users__item.m-fans')))
         fans = browser.find_elements(By.CLASS_NAME, 'b-users__item.m-fans')
         for fan in fans:
             fan_user_name = str(fan.find_element(By.CLASS_NAME, 'b-username').get_attribute('href')).split("/")[-1]
             print("Blocking ", fan_user_name)
+            sleep(random.randint(1, 10))
             fan.find_element(By.CLASS_NAME, 'b-dropdown-dots-wrapper.has-tooltip').click()
             block_button = WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'dropdown-menu.dropdown-menu-right.show'))).find_elements(By.XPATH, "./child::*")[-2]
+            sleep(random.randint(1, 10))
             block_button.click()
             WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'modal-body')))
             block_user = browser.find_elements(By.CLASS_NAME, 'b-input-radio__container')[-2]
+            sleep(random.randint(1, 10))
             block_user.click()
             confirm_button = browser.find_element(By.CLASS_NAME, 'modal-footer').find_elements(By.XPATH, "./child::*")[1]
+            sleep(random.randint(1, 10))
             confirm_button.click()
+            num_blocked = num_blocked + 1
             break
         #can only block 1 user every 60 seconds
-        sleep(61)
+        sleep(random.randint(80, 200))
         browser.get(SUBS_URL) #refresh the page
     except KeyboardInterrupt:
         exit()
     except TimeoutException:
         print("No fans left!!")
-        exit()
