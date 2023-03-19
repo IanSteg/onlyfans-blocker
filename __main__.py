@@ -73,8 +73,14 @@ while True:
             block_button = WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'dropdown-menu.dropdown-menu-right.show'))).find_elements(By.XPATH, "./child::*")[-2]
             sleep(random.randint(1, 10))
             block_button.click()
-            WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'modal-body')))
-            block_user = browser.find_elements(By.CLASS_NAME, 'b-input-radio__container')[-2]
+            radios = WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'modal-body'))).find_elements(By.XPATH, "./child::*")
+            block_user = None
+            for radio in radios:
+                if "Block user from accessing your profile." in radio.find_element(By.CLASS_NAME, 'b-input-radio__text').text:
+                    block_user = radio
+                    break
+            if not block_user:
+                assert TimeoutException
             sleep(random.randint(1, 10))
             block_user.click()
             confirm_button = browser.find_element(By.CLASS_NAME, 'modal-footer').find_elements(By.XPATH, "./child::*")[1]
