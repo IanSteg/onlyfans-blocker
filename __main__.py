@@ -35,35 +35,38 @@ SUBS_URL = 'https://onlyfans.com/my/subscribers/expired'
 USERNAME = 'example@example.com'
 PASS = 'Passw0rd'
 
-# Open OF
-browser.get(MAIN_URL)
+def loginCheck():
+    #wait for login
+    try:
+        print("waiting for login check...")
+        sleep(10) #give time for captcha
+        WAIT.until(EC.visibility_of_element_located((By.CLASS_NAME, 'b-make-post__main-wrapper')))
+        print("OnlyFans login successful!")
+        print("login successful")
+        return True
+    except TimeoutException as te:
+        print(str(te))
+        print("Login Failure: Timed Out! Please check your credentials.")
+        print(": If the problem persists, OnlySnarf may require an update.")
+        return False
+    except Exception as e:
+        print("OnlyFans login failure")
+        print(e)
+        return False
 
-#login
-username_field = WAIT.until(EC.presence_of_element_located((By.NAME, "email")))
-password_field = WAIT.until(EC.presence_of_element_located((By.NAME, "password")))
-username_field.click()
-username_field.send_keys(USERNAME)
-password_field.click()
-password_field.send_keys(PASS)
-sleep(3)
-browser.find_element(By.CLASS_NAME, 'g-btn.m-rounded.m-block.m-md.mb-0').click()
+def login():
+    # Open OF
+    browser.get(MAIN_URL)
 
-#wait for login
-try:
-    print("waiting for login check...")
-    sleep(10) #give time for captcha
-    WAIT.until(EC.visibility_of_element_located((By.CLASS_NAME, 'b-make-post__main-wrapper')))
-    print("OnlyFans login successful!")
-    print("login successful")
-except TimeoutException as te:
-    print(str(te))
-    print("Login Failure: Timed Out! Please check your credentials.")
-    print(": If the problem persists, OnlySnarf may require an update.")
-    exit()
-except Exception as e:
-    print("OnlyFans login failure")
-    print(e)
-    exit()
+    #login
+    username_field = WAIT.until(EC.presence_of_element_located((By.NAME, "email")))
+    password_field = WAIT.until(EC.presence_of_element_located((By.NAME, "password")))
+    username_field.click()
+    username_field.send_keys(USERNAME)
+    password_field.click()
+    password_field.send_keys(PASS)
+    sleep(3)
+    browser.find_element(By.CLASS_NAME, 'g-btn.m-rounded.m-block.m-md.mb-0').click()
 
 #goto subscribers page
 browser.get(SUBS_URL)
@@ -76,6 +79,9 @@ while True:
         while (datetime.now().hour != 10):
             sleep(60)
         num_blocked = 0
+        browser.get(MAIN_URL)
+        if loginCheck() == False:
+            login()
     try:
         WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'b-users__item.m-fans')))
         fans = browser.find_elements(By.CLASS_NAME, 'b-users__item.m-fans')
