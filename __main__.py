@@ -1,6 +1,8 @@
 from time import sleep
 from datetime import datetime
 import random
+from dotenv import load_dotenv
+import os
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -31,9 +33,9 @@ WAIT = WebDriverWait(browser, 30, poll_frequency=2)
 MAIN_URL = 'https://www.onlyfans.com/'
 SUBS_URL = 'https://onlyfans.com/my/subscribers/expired'
 
-#creds
-USERNAME = 'example@example.com'
-PASS = 'Passw0rd'
+load_dotenv()
+USERNAME = os.getenv('OF_USERNAME')
+PASS = os.getenv('OF_PASS')
 
 def loginCheck():
     #wait for login
