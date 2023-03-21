@@ -7,15 +7,29 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 
 #open a browser window
-browser  = webdriver.Chrome(ChromeDriverManager().install())
+options = Options()
+options.add_argument("--allow-insecure-localhost")
+options.add_argument("--no-sandbox") # Bypass OS security model
+# possibly linux only
+options.add_argument('disable-notifications')
+options.add_argument("--disable-gpu")
+options.add_argument("--disable-crash-reporter")
+options.add_argument("--disable-extensions")
+options.add_argument("--disable-infobars")
+options.add_argument("--disable-in-process-stack-traces")
+options.add_argument("--disable-logging")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--log-level=3")
+options.add_argument("--output=/dev/null")
+browser  = webdriver.Chrome(options=options)
 WAIT = WebDriverWait(browser, 30, poll_frequency=2)
 
 #only urls we care about
 MAIN_URL = 'https://www.onlyfans.com/'
-SUBS_URL = 'https://onlyfans.com/my/subscribers'
+SUBS_URL = 'https://onlyfans.com/my/subscribers/expired'
 
 #creds
 USERNAME = 'example@example.com'
