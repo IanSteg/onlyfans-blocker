@@ -70,6 +70,14 @@ def login():
     sleep(3)
     browser.find_element(By.CLASS_NAME, 'g-btn.m-rounded.m-block.m-md.mb-0').click()
 
+def hitLimit():
+    try:
+        if "Daily limit exceeded. Please try again later." in WAIT.until(EC.visibility_of_element_located((By.CLASS_NAME, 'modal-body'))).text:
+            print ("Daily limit reached")
+            return True
+    except:
+        return False
+
 login()
 loginCheck()
 #goto subscribers page
@@ -111,6 +119,8 @@ while True:
             sleep(random.randint(2, 5))
             confirm_button.click()
             num_blocked = num_blocked + 1
+            if hitLimit() == True:
+                num_blocked = 50
             break
         #can only block 1 user every 60 seconds
         sleep(random.randint(80, 200))
