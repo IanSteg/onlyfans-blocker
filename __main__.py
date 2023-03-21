@@ -68,6 +68,8 @@ def login():
     sleep(3)
     browser.find_element(By.CLASS_NAME, 'g-btn.m-rounded.m-block.m-md.mb-0').click()
 
+login()
+loginCheck()
 #goto subscribers page
 browser.get(SUBS_URL)
 
