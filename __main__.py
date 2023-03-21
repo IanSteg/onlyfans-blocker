@@ -77,7 +77,7 @@ while True:
             block_user = None
             for radio in radios:
                 if "Block user from accessing your profile." in radio.find_element(By.CLASS_NAME, 'b-input-radio__text').text:
-                    block_user = radio.find_element(By.XPATH, "./..")
+                    block_user = radio.find_element(By.CLASS_NAME, 'b-input-radio__container')
                     break
             if not block_user:
                 assert Exception
