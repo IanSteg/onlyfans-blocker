@@ -68,23 +68,23 @@ while True:
         for fan in fans:
             fan_user_name = str(fan.find_element(By.CLASS_NAME, 'b-username').get_attribute('href')).split("/")[-1]
             print("Blocking ", fan_user_name)
-            sleep(random.randint(1, 10))
+            sleep(random.randint(2, 5))
             fan.find_element(By.CLASS_NAME, 'b-dropdown-dots-wrapper.has-tooltip').click()
             block_button = WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'dropdown-menu.dropdown-menu-right.show'))).find_elements(By.XPATH, "./child::*")[-2]
-            sleep(random.randint(1, 10))
+            sleep(random.randint(2, 5))
             block_button.click()
             radios = WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'modal-body'))).find_elements(By.XPATH, "./child::*")
             block_user = None
             for radio in radios:
                 if "Block user from accessing your profile." in radio.find_element(By.CLASS_NAME, 'b-input-radio__text').text:
-                    block_user = radio
+                    block_user = radio.find_element(By.XPATH, "./..")
                     break
             if not block_user:
-                assert TimeoutException
-            sleep(random.randint(1, 10))
+                assert Exception
+            sleep(random.randint(2, 5))
             block_user.click()
             confirm_button = browser.find_element(By.CLASS_NAME, 'modal-footer').find_elements(By.XPATH, "./child::*")[1]
-            sleep(random.randint(1, 10))
+            sleep(random.randint(2, 5))
             confirm_button.click()
             num_blocked = num_blocked + 1
             break
@@ -95,3 +95,6 @@ while True:
         exit()
     except TimeoutException:
         print("No fans left!!")
+    except Exception as e:
+        print (e)
+        browser.get(SUBS_URL) #refresh the page
