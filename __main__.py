@@ -94,6 +94,7 @@ while True:
         browser.get(MAIN_URL)
         if loginCheck() == False:
             login()
+            browser.get(SUBS_URL)
     try:
         WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'b-users__item.m-fans')))
         fans = browser.find_elements(By.CLASS_NAME, 'b-users__item.m-fans')
