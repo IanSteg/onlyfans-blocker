@@ -32,6 +32,7 @@ WAIT = WebDriverWait(browser, 30, poll_frequency=2)
 #only urls we care about
 MAIN_URL = 'https://www.onlyfans.com/'
 SUBS_URL = 'https://onlyfans.com/my/subscribers/expired'
+MESSAGES_URL = 'https://onlyfans.com/my/chats/'
 
 load_dotenv()
 USERNAME = os.getenv('OF_USERNAME')
@@ -88,7 +89,8 @@ while True:
     #daily block limit is 50
     if num_blocked >= 50:
         while (datetime.now().hour != 10):
-            sleep(60)
+            sleep(600)
+            browser.get(MESSAGES_URL)
         num_blocked = 0
         browser.get(MAIN_URL)
         if loginCheck() == False:
