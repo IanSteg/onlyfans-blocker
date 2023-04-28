@@ -132,6 +132,7 @@ while True:
         exit()
     except TimeoutException:
         print("No fans left!!")
+        browser.get(SUBS_URL) #refresh the page
     except Exception as e:
         print (e)
         browser.get(SUBS_URL) #refresh the page
