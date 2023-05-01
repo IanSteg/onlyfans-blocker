@@ -133,6 +133,9 @@ while True:
     except TimeoutException:
         print("No fans left!!")
         browser.get(SUBS_URL) #refresh the page
+        if loginCheck() == False:
+            login()
+            loginCheck()
     except Exception as e:
         print (e)
         browser.get(SUBS_URL) #refresh the page
