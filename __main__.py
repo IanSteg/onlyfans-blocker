@@ -31,7 +31,7 @@ WAIT = WebDriverWait(browser, 30, poll_frequency=2)
 
 #only urls we care about
 MAIN_URL = 'https://www.onlyfans.com/'
-SUBS_URL = 'https://onlyfans.com/my/subscribers/expired'
+SUBS_URL = 'https://onlyfans.com/collections/user-lists/977811128'
 MESSAGES_URL = 'https://onlyfans.com/my/chats/'
 
 load_dotenv()
@@ -49,7 +49,6 @@ def loginCheck():
     except TimeoutException as te:
         print(str(te))
         print("Login Failure: Timed Out! Please check your credentials.")
-        print(": If the problem persists, OnlySnarf may require an update.")
         return False
     except Exception as e:
         print("OnlyFans login failure")
@@ -89,7 +88,7 @@ while True:
     #daily block limit is 50
     if num_blocked >= 50:
         while (datetime.now().hour != 10):
-            sleep(600)
+            sleep(random.randint(500, 1000))
             browser.get(MESSAGES_URL)
         num_blocked = 0
         browser.get(MAIN_URL)
@@ -102,7 +101,7 @@ while True:
         fans = browser.find_elements(By.CLASS_NAME, 'b-users__item.m-fans')
         for fan in fans:
             fan_user_name = str(fan.find_element(By.CLASS_NAME, 'b-username').get_attribute('href')).split("/")[-1]
-            print("Blocking ", fan_user_name)
+            print("Blocking", fan_user_name)
             sleep(random.randint(2, 5))
             fan.find_element(By.CLASS_NAME, 'b-dropdown-dots-wrapper.has-tooltip').click()
             block_button = WAIT.until(EC.presence_of_element_located((By.CLASS_NAME, 'dropdown-menu.dropdown-menu-right.show'))).find_elements(By.XPATH, "./child::*")[-2]
@@ -116,10 +115,10 @@ while True:
                     break
             if not block_user:
                 assert Exception
-            sleep(random.randint(2, 5))
+            sleep(random.randint(1, 5))
             block_user.click()
             confirm_button = browser.find_element(By.CLASS_NAME, 'modal-footer').find_elements(By.XPATH, "./child::*")[1]
-            sleep(random.randint(2, 5))
+            sleep(random.randint(1, 5))
             confirm_button.click()
             num_blocked = num_blocked + 1
             if hitLimit() == True:
@@ -136,7 +135,7 @@ while True:
         if loginCheck() == False:
             login()
             loginCheck()
-        browser.get(SUBS_URL) #refresh the page
+        browser.get(SUBS_URL)
     except Exception as e:
         print (e)
         browser.get(SUBS_URL) #refresh the page
