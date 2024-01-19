@@ -27,11 +27,11 @@ options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--log-level=3")
 options.add_argument("--output=/dev/null")
 browser  = webdriver.Chrome(options=options)
-WAIT = WebDriverWait(browser, 30, poll_frequency=2)
+WAIT = WebDriverWait(browser, 600, poll_frequency=2)
 
 #only urls we care about
 MAIN_URL = 'https://www.onlyfans.com/'
-SUBS_URL = 'https://onlyfans.com/collections/user-lists/977811128'
+SUBS_URL = 'https://onlyfans.com/my/collections/user-lists/1015209081'
 MESSAGES_URL = 'https://onlyfans.com/my/chats/'
 
 load_dotenv()
@@ -124,8 +124,8 @@ while True:
             if hitLimit() == True:
                 num_blocked = 50
             break
-        #can only block 1 user every 60 seconds
-        sleep(random.randint(80, 200))
+        #can only block 1 user every 6 seconds
+        sleep(random.randint(6, 10))
         browser.get(SUBS_URL) #refresh the page
     except KeyboardInterrupt:
         exit()
